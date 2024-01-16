@@ -1,31 +1,28 @@
-Базовый проект на Laravel 7 с Docker.
-Docker влючает в себя сервисы app (php:7.4-fpm), nginx, mysql 5.7 и adminer.
-После команды git clone требуется выполнить следующие действия:
-1. docker-compose build
-2. docker-compose up -d
-3. docker-compose ps  (проверяем, что контейнеры запущены)
-4. docker-compose exec app ls -l (проект laravel содержится в сервисе app)
-5. docker-compose exec app composer install
-6. cp .env.example .env
-7. docker-compose exec app php artisan key:generate
-8. docker-compose exec app php artisan config:cache
-9. localhost:8000 - должна быть стартовая страница Laravel
-Если вы видете страницу nginx сервиса, то нужно проверить docker-compose logs nginx.
-В случае, если доступ к папке public будет запрещен (Permission denied), дать разрешения вручную:
-docker-compose exec nginx chmod 777 /var/www/public
+Тестовое задание выполнено на фреймворке Laravel. Использован Docker (настройки в файле docker-compose.yml).
+Для сохранения изображений использован доп пакет spatie/medialibrary, для фильтрации данных в списковых методах - tucker-eric/eloquentfilter.
+Есть краткая документация с использованием phpdocs.
 
-Настройка БД
-1. в adminer зайти под пользователем root и создать БД laravel
-1. docker-compose exec db bash
-2. mysql -u root -p
-3. show databases;
-4.* GRANT ALL ON laravel.* TO 'root'@'%' IDENTIFIED BY '12345';
-5.* FLUSH PRIVILEGES;
-6. exit, exit
-7. docker-compose exec app php artisan migrate
+Краткое ТЗ:
+Обязательно должна быть клиентская часть и админка. Всего есть 2 вида пользователя - гость (посетитель сайта - может только просматривать список сеансов, видит список сеансов сразу - не вводя логин и пароль),  админ (входит в админку сайта с помощью логина и пароля, может осуществлять любые действия в админке).
 
-Если при работе с БД перестает что-то работать, то перезапускает контейнеры либо очищаем кэш
-docker-compose exec app php artisan config:cache, docker-compose exec app php artisan config:clear, 
-docker-compose exec app php artisan cache:clear
+В админской части мы можем добавлять расписание сеансов для кинотеатра и фильмы
 
-Готово! 
+При добавлении фильма:
+- Название фильма
+- Фото
+- Описание
+- Продолжительность
+- Возрастные ограничения
+
+Поля при добавлении сеанса:
+-Фильм - выбор из каталога фильмов с помощью выпадающего списка
+-Время и дата. Время между сеансами должно быть не менее 30 минут.
+-Стоимость
+
+Должна иметься возможность удаления , редактирования данных сеансов и фильмов.
+
+В клиентской части сайта вывод этих сеансов должен быть в хронологическом порядке по дате и времени от последнего к первому.
+В админской части - аналогично.
+
+
+
